@@ -155,8 +155,12 @@ export default function DashboardPage() {
 
                         {activeTab === 'shared' && data.shared.map((item) => (
                             <Card key={item._id} className="rounded-2xl border-border/50">
-                                <div className="h-32 bg-muted relative rounded-t-2xl overflow-hidden">
-                                    {item.imageUrl && <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" />}
+                                <div className="h-32 bg-muted relative rounded-t-2xl overflow-hidden flex items-center justify-center">
+                                    {item.imageUrl ? (
+                                        <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" />
+                                    ) : (
+                                        <span className="text-muted-foreground text-sm">No image provided</span>
+                                    )}
                                     <Badge variant={item.availability ? "default" : "secondary"} className="absolute top-2 right-2">
                                         {item.availability ? 'Available' : 'Unavailable'}
                                     </Badge>

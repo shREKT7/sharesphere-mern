@@ -15,18 +15,35 @@ export default function AddResourcePage() {
         description: '',
         category: '',
         condition: '',
-        imageUrl: '',
     });
+    const [selectedFile, setSelectedFile] = useState(null);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.id]: e.target.value });
+    };
+
+    const handleFileChange = (e) => {
+        setSelectedFile(e.target.files[0]);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            const { data } = await api.post('/resources', formData);
+            const submitData = new FormData();
+            submitData.append("title", formData.title);
+            submitData.append("description", formData.description);
+            submitData.append("category", formData.category);
+            submitData.append("condition", formData.condition);
+            if (selectedFile) {
+                submitData.append("image", selectedFile);
+            }
+
+            const { data } = await api.post('/resources', submitData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
             if (data.success) {
                 toast.success('Resource added successfully!');
                 navigate('/dashboard');
@@ -95,13 +112,12 @@ export default function AddResourcePage() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="imageUrl">Image URL (Optional)</Label>
+                            <Label htmlFor="image">Resource Image</Label>
                             <Input
-                                id="imageUrl"
-                                type="url"
-                                placeholder="https://example.com/image.jpg"
-                                value={formData.imageUrl}
-                                onChange={handleChange}
+                                id="image"
+                                type="file"
+                                accept="image/jpeg, image/png, image/jpg"
+                                onChange={handleFileChange}
                             />
                         </div>
                     </CardContent>

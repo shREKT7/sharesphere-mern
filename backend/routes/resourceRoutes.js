@@ -9,6 +9,7 @@ const {
     createResource,
     deleteResource
 } = require('../controllers/resourceController');
+const upload = require('../middleware/upload');
 
 // GET all resources
 router.get('/', getResources);
@@ -20,6 +21,7 @@ router.get('/:id', getResourceById);
 router.post(
     '/',
     protect,
+    upload.single('image'),
     [
         body('title', 'Title is required').not().isEmpty(),
         body('description', 'Description is required').not().isEmpty(),

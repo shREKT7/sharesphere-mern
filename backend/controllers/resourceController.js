@@ -64,7 +64,12 @@ const getResourceById = async (req, res, next) => {
 // @access  Private
 const createResource = async (req, res, next) => {
     try {
-        const { title, description, category, condition, imageUrl } = req.body;
+        const { title, description, category, condition } = req.body;
+
+        let imageUrl = req.body.imageUrl || null;
+        if (req.file) {
+            imageUrl = req.file.path;
+        }
 
         const resource = new Resource({
             title,
