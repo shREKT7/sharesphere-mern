@@ -3,12 +3,14 @@ import { AuthContext } from '../context/AuthContext';
 import api from '../services/api';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
+import { Skeleton } from '../components/ui/skeleton';
 import { MapPin, ShieldCheck, Share2, Handshake } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function ProfilePage() {
     const { user } = useContext(AuthContext);
     const [stats, setStats] = useState({ shared: 0, borrowed: 0 });
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         fetchUserStats();
@@ -17,6 +19,7 @@ export default function ProfilePage() {
     const fetchUserStats = async () => {
         try {
             if (!user) return;
+            setLoading(true);
             const [sharedRes, borrowedRes] = await Promise.all([
                 api.get('/resources'),
                 api.get('/borrow/borrowed')
@@ -32,6 +35,8 @@ export default function ProfilePage() {
             });
         } catch (error) {
             toast.error('Could not load profile statistics');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -75,28 +80,44 @@ export default function ProfilePage() {
                 <div className="col-span-1 md:col-span-2 space-y-6">
                     <h2 className="text-2xl font-bold tracking-tight">Community Impact</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <Card className="rounded-2xl border-border/50">
-                            <CardContent className="p-6 flex items-center gap-4">
-                                <div className="h-12 w-12 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center">
-                                    <Share2 className="h-6 w-6" />
-                                </div>
-                                <div>
-                                    <p className="text-3xl font-bold">{stats.shared}</p>
-                                    <p className="text-muted-foreground text-sm">Items Shared</p>
-                                </div>
-                            </CardContent>
-                        </Card>
-                        <Card className="rounded-2xl border-border/50">
-                            <CardContent className="p-6 flex items-center gap-4">
-                                <div className="h-12 w-12 rounded-full bg-orange-500/10 text-orange-500 flex items-center justify-center">
-                                    <Handshake className="h-6 w-6" />
-                                </div>
-                                <div>
-                                    <p className="text-3xl font-bold">{stats.borrowed}</p>
-                                    <p className="text-muted-foreground text-sm">Successful Borrows</p>
-                                </div>
-                            </CardContent>
-                        </Card>
+                        {loading ? (
+                            [0, 1].map(i => (
+                                <Card key={i} className="rounded-2xl border-border/50">
+                                    <CardContent className="p-6 flex items-center gap-4">
+                                        <Skeleton className="h-12 w-12 rounded-full shrink-0" />
+                                        <div className="flex-1 space-y-2">
+                                            <Skeleton className="h-7 w-16" />
+                                            <Skeleton className="h-4 w-24" />
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            ))
+                        ) : (
+                            <>
+                                <Card className="rounded-2xl border-border/50">
+                                    <CardContent className="p-6 flex items-center gap-4">
+                                        <div className="h-12 w-12 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center">
+                                            <Share2 className="h-6 w-6" />
+                                        </div>
+                                        <div>
+                                            <p className="text-3xl font-bold">{stats.shared}</p>
+                                            <p className="text-muted-foreground text-sm">Items Shared</p>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                                <Card className="rounded-2xl border-border/50">
+                                    <CardContent className="p-6 flex items-center gap-4">
+                                        <div className="h-12 w-12 rounded-full bg-orange-500/10 text-orange-500 flex items-center justify-center">
+                                            <Handshake className="h-6 w-6" />
+                                        </div>
+                                        <div>
+                                            <p className="text-3xl font-bold">{stats.borrowed}</p>
+                                            <p className="text-muted-foreground text-sm">Successful Borrows</p>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </>
+                        )}
                     </div>
                 </div>
 

@@ -7,6 +7,7 @@ import { Badge } from '../components/ui/badge';
 import { Skeleton } from '../components/ui/skeleton';
 import { Input } from '../components/ui/input';
 import { toast } from 'sonner';
+import { Package } from 'lucide-react';
 
 export default function BrowsePage() {
     const [resources, setResources] = useState([]);
@@ -143,32 +144,39 @@ export default function BrowsePage() {
                     ))
                 ) : resources.length > 0 ? (
                     resources.map((resource) => (
-                        <Card key={resource._id} className="rounded-2xl overflow-hidden border-border/50 hover:shadow-lg transition-all duration-300 flex flex-col group">
+                        <Card key={resource._id} className="rounded-2xl overflow-hidden border-border/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group cursor-default">
+                            {/* Image */}
                             <div className="h-48 overflow-hidden bg-muted relative">
                                 {resource.imageUrl ? (
                                     <img src={resource.imageUrl} alt={resource.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                 ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-muted-foreground bg-secondary/50">
-                                        No image provided
+                                    <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground bg-secondary/30 gap-2">
+                                        <Package className="w-10 h-10 opacity-30" />
+                                        <span className="text-xs">No image</span>
                                     </div>
                                 )}
-                                <div className="absolute top-3 right-3 flex gap-2">
-                                    <Badge variant={resource.availability ? "default" : "secondary"} className="shadow-sm">
-                                        {resource.availability ? 'Available' : 'Unavailable'}
+                                {/* Availability badge overlay */}
+                                <div className="absolute top-3 left-3">
+                                    <Badge variant={resource.availability ? 'default' : 'secondary'} className="shadow-sm text-xs">
+                                        {resource.availability ? '● Available' : '○ Unavailable'}
                                     </Badge>
                                 </div>
                             </div>
+
+                            {/* Body */}
                             <CardHeader className="pb-2 flex-grow">
-                                <div className="flex justify-between items-start mb-1">
-                                    <span className="text-xs font-semibold text-primary uppercase tracking-wider">{resource.category}</span>
-                                    <span className="text-xs text-muted-foreground">{resource.condition}</span>
+                                <div className="flex items-center justify-between mb-1">
+                                    <span className="text-xs font-bold text-primary uppercase tracking-wider">{resource.category}</span>
+                                    <Badge variant="outline" className="text-xs font-normal">{resource.condition}</Badge>
                                 </div>
-                                <CardTitle className="text-xl line-clamp-1">{resource.title}</CardTitle>
-                                <CardDescription className="line-clamp-2 mt-2">{resource.description}</CardDescription>
+                                <CardTitle className="text-lg line-clamp-1">{resource.title}</CardTitle>
+                                <CardDescription className="line-clamp-2 mt-1">{resource.description}</CardDescription>
                             </CardHeader>
+
+                            {/* Footer */}
                             <CardFooter className="flex flex-col gap-3 pt-4 border-t border-border/50 bg-muted/10">
                                 <div className="flex items-center gap-2 w-full">
-                                    <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center text-[10px] font-bold text-primary">
+                                    <div className="h-7 w-7 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary shrink-0">
                                         {resource.owner?.name?.charAt(0) || 'U'}
                                     </div>
                                     <span className="text-sm text-muted-foreground truncate">{resource.owner?.name}</span>
