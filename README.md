@@ -1,13 +1,55 @@
 # ShareSphere
 
-A modern MERN stack Community Resource Sharing Platform built with TailwindCSS and ShadCN UI.
+ShareSphere is a community resource sharing platform built using the MERN stack.
+
+Users can share tools, books, and equipment with their local community instead of buying new items.
+
+## Features
+
+- User authentication with JWT
+- Resource sharing marketplace
+- Borrow request workflow
+- User dashboard
+- Notifications system
+- Cloudinary image uploads
+- Modern UI with TailwindCSS and ShadCN
+
+## Tech Stack
+
+Frontend:
+React (Vite)
+TailwindCSS
+ShadCN UI
+Framer Motion
+
+Backend:
+Node.js
+Express
+MongoDB
+Mongoose
+
+Cloud Services:
+Cloudinary (image storage)
 
 ## Project Structure
-- `backend/`: Express.js & MongoDB backend
-- `frontend/`: React + Vite frontend
 
-## Quick Start
-1. Cd into `backend/` and run `npm install`, then `npm run dev`. Ensure `.env` is properly configured.
-2. Cd into `frontend/` and run `npm install`, then `npm run dev`.
+frontend/
+backend/
 
-Refer to `PROJECT_SPEC.md` for complete requirements.
+## Getting Started
+
+Install dependencies:
+
+Backend
+npm install
+
+Frontend
+npm install
+
+Run backend
+
+npm run dev
+
+Run frontend
+
+npm run dev
